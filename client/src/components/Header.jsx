@@ -12,7 +12,7 @@ const Header = () => {
 
         <h1 className="text-3xl sm:text-6xl font-semibold sm:leading-16 text-gray-700">
           LE blog sur la culture <br />{" "}
-          <span className="text-primary"> pop </span> !
+          <span style={{ color: "#00FF00" }}> pop </span> !
         </h1>
 
         <p className="my-6 sm:my-8 max-w-2xl m-auto max-sm:text-xs text-gray-500">
