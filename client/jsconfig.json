@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "esnext",
+        "jsx": "react-jsx",
+        "checkJs": true,
+        "baseUrl": "./src",
+        "moduleResolution": "bundler"
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        ".next"
+    ]
+}
