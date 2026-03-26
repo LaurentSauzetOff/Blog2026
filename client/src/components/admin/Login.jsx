@@ -18,7 +18,7 @@ const Login = () => {
             <p className="font-light">Entrez vos identifiants pour accéder à votre espace administrateur</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-6 w-full sm:max-w-md text-gray-600">
+          <form onSubmit={handleSubmit} className="mt-6 w-full sm:max-w-md text-foreground-600">
             <div className="flex flex-col">
               <label>Email</label>
               <input onChange={e => setEmail(e.target.value)} value={email} type="email" required placeholder="Votre adresse mail" className="border-b-2 border-gray-300 p-2 outline-none mb-6" />

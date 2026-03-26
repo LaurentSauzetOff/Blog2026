@@ -11,7 +11,7 @@ import Login from "components/admin/Login";
 
 const App = () => {
   return (
-    <div>
+    <div className="bg-background text-foreground">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blog/:id" element={<Blog />} />

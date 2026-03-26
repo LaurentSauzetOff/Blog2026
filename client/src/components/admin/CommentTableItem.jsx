@@ -9,12 +9,12 @@ const CommentTableItem = ({ comment, fetchComments }) => {
   return (
     <tr className="order-y border-gray-300">
       <td className="px-6 py-4">
-        <b className="font-medium text-gray-600">Article</b> : {blog.title}
+        <b className="font-medium text-foreground-600">Article</b> : {blog.title}
         <br />
         <br />
-        <b className="font-medium text-gray-600">Nom</b> : {comment.name}
+        <b className="font-medium text-foreground-600">Nom</b> : {comment.name}
         <br />
-        <b className="font-medium text-gray-600">Commentaire</b> :{" "}
+        <b className="font-medium text-foreground-600">Commentaire</b> :{" "}
         {comment.content}
       </td>
       <td className="px-6 py-4 max-sm:hidden">{BlogDate.toLocaleDateString()}</td>

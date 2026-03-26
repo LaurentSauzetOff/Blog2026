@@ -21,13 +21,13 @@ const Comments = () => {
         <div className="flex gap-3">
           <button
             onClick={() => setFilter("Approved")}
-            className="{`shadow-custom-sm border rounded-full px-4 py-1 curssor-pointer text-xs ${filter === 'Approved' ? 'text-primary' : 'text-gray-700'}`}"
+            className="{`shadow-custom-sm border rounded-full px-4 py-1 curssor-pointer text-xs ${filter === 'Approved' ? 'text-primary' : 'text-foreground-700'}`}"
           >
             Validé
           </button>
           <button
             onClick={() => setFilter("Not Approved")}
-            className="{`shadow-custom-sm border rounded-full px-4 py-1 curssor-pointer text-xs ${filter === 'Not Approved' ? 'text-primary' : 'text-gray-700'}`}"
+            className="{`shadow-custom-sm border rounded-full px-4 py-1 curssor-pointer text-xs ${filter === 'Not Approved' ? 'text-primary' : 'text-foreground-700'}`}"
           >
             Non validé
           </button>
@@ -35,8 +35,8 @@ const Comments = () => {
       </div>
 
       <div className="relative h-4/5 mt-4 max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white">
-        <table className="w-full text-sm text-gray-500">
-          <thead className="text-xs text-gray-700 text-left uppercase">
+        <table className="w-full text-sm text-foreground-500">
+          <thead className="text-xs text-foreground-700 text-left uppercase">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Titre de l'article et commentaires

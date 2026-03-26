@@ -38,7 +38,7 @@ const Blog = () => {
         alt=""
       />
       <Navbar />
-      <div className="text-center mt-20 text-gray-600">
+      <div className="text-center mt-20 text-foreground-600">
         <p className="text-primary py-4 font-medium">
           Publié le {Moment(data.CreatedAt).format("DD/MMMM/YYYY")}
         </p>
@@ -53,7 +53,7 @@ const Blog = () => {
       <div className="mx-5 max-w-5xl md:mx-auto my-10 mt-6">
         <img src={data.image} alt="" className="rounded-3xl mb-5" />
         <div
-          className="rich-text max-w-3xl mx-auto"
+          className="rich-text max-w-3xl mx-auto "
           dangerouslySetInnerHTML={{ __html: data.description }}
         ></div>
 
@@ -63,7 +63,7 @@ const Blog = () => {
             {comments.map((item, index) => (
               <div
                 key={index}
-                className="relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-gray-600"
+                className="relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-foreground-600"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <img src={assets.user_icon} className="w-6" alt="" />
