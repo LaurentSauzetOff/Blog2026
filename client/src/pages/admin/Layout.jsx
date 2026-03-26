@@ -24,7 +24,7 @@ const Layout = () => {
         </div>
         <button
           onClick={logout}
-          className="text-sm px-8 py-2 bg-primary text-white rounded-full cursor-pointer"
+          className="text-sm px-8 py-2 bg-primary text-dark-text rounded-full cursor-pointer"
         >
           Logout
         </button>

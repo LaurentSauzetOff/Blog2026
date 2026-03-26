@@ -24,43 +24,43 @@ const Dashboard = () => {
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded-shadow cursor-pointer hover:scale-105 transition-all">
           <img src={assets.dashboard_icon_1} alt="" />
           <div>
-            <p className="text-xl font-semibold text-foreground-600">
+            <p className="text-xl font-semibold text-dark-text">
               {dashboardData.blogs}
             </p>
-            <p className="text-foreground-400 font-light">Articles</p>
+            <p className="text-dark-text font-light">Articles</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded-shadow curssor-pointer hover:scale-105 transition-all">
           <img src={assets.dashboard_icon_2} alt="" />
           <div>
-            <p className="text-xl font-semibold text-foreground-600">
+            <p className="text-xl font-semibold text-dark-text">
               {dashboardData.comments}
             </p>
-            <p className="text-foreground-400 font-light">Commentaires</p>
+            <p className="text-dark-text font-light">Commentaires</p>
           </div>
         </div>
 
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded-shadow curssor-pointer hover:scale-105 transition-all">
           <img src={assets.dashboard_icon_3} alt="" />
           <div>
-            <p className="text-xl font-semibold text-foreground-600">
+            <p className="text-xl font-semibold text-dark-text">
               {dashboardData.drafts}
             </p>
-            <p className="text-foreground-400 font-light">Brouillons</p>
+            <p className="text-dark-text font-light">Brouillons</p>
           </div>
         </div>
       </div>
 
       <div>
-        <div className="flex items-center gap-3 m-4 mt-6 text-foreground-600">
+        <div className="flex items-center gap-3 m-4 mt-6 text-dark-text">
           <img src={assets.dashboard_icon_4} alt="" />
           <p>Derniers articles</p>
         </div>
 
         <div className="relative max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white">
-          <table className="w-full text-sm text-foreground-500">
-            <thead className="text-xs text-foreground-600 text-left uppercase">
+          <table className="w-full text-sm text-dark-text">
+            <thead className="text-xs text-dark-text text-left uppercase">
               <tr>
                 <th scope="col" className="px-2 py-4 xl:px-6">
                   #
