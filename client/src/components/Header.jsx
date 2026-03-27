@@ -10,12 +10,12 @@ const Header = () => {
           <img src={assets.star_icon} className="w-2.5" alt="" />
         </div>
 
-        <h1 className="text-3xl sm:text-6xl font-semibold sm:leading-16 text-gray-700">
+        <h1 className="text-3xl sm:text-6xl font-semibold sm:leading-16 text-foreground">
           LE blog sur la culture <br />{" "}
-          <span style={{ color: "#00FF00" }}> pop </span> !
+          <span className="text-primary" /* style={{ color: "#00FF00" }} */> pop </span> !
         </h1>
 
-        <p className="my-6 sm:my-8 max-w-2xl m-auto max-sm:text-xs text-gray-500">
+        <p className="my-6 sm:my-8 max-w-2xl m-auto max-sm:text-xs text-foreground">
           PopCultureQuest est votre destination ultime pour tout ce qui concerne
           la culture pop. Plongez dans un univers de divertissement, de
           tendances et de découvertes avec nous !
