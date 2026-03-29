@@ -2,6 +2,7 @@ import fs from "fs";
 import imagekit from "../configs/imageKit.js";
 import path from "path";
 import Blog from "../models/Blog.js";
+import Comment from "../models/Comment.js";
 
 export const addBlog = async (req, res) => {
   try {
@@ -127,3 +128,35 @@ export const togglePublish = async (req, res) => {
     });
   }
 };
+
+export const addComment = async (req, res) => {
+  try {
+    const { blog, name, content } = req.body;
+    await Comment.create({ blog, name, content });
+    res.json({
+      success: true,
+      message: "Commentaire ajouté avec succès",
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getBlogComments = async (req, res) => {
+  try {
+    const {blogId} = req.body;
+    const comments = await Comment.find({blog: blogId, isApproved: true}).sort({createdAt: -1});
+    res.json({
+      success: true,
+      comments,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
