@@ -14,7 +14,7 @@ export const adminLogin = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ email }, process.env.JWT_SECRET);
+    const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
     res.json({ success: true, token });
   } catch (error) {
     res.json({ success: false, message: error.message });
