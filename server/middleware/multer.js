@@ -1,19 +1,22 @@
 import multer from "multer";
+import os from "os";
 
-// Configuration explicite du stockage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Sur Vercel, on doit utiliser /tmp. 
-    // En l'écrivant en dur, on rassure SonarCloud sur la destination.
-    cb(null, '/tmp');
+    cb(null, os.tmpdir());
   },
   filename: (req, file, cb) => {
-    // On crée un nom de fichier unique pour éviter les conflits
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname);
+  },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  limits: {
+    // 5 Mo = 5 * 1024 * 1024 octets
+    fileSize: 5 * 1024 * 1024,
+  },
+});
 
 export default upload;
