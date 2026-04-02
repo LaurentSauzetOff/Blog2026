@@ -1,30 +1,36 @@
 import React from "react";
 import { assets } from "./../assets/assets";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; // 1. On utilise Link pour la navigation
 import { useAppContext } from "../context/AppContext";
 
 const Navbar = () => {
+  const { token } = useAppContext(); // On n'a plus besoin de 'navigate' pour le logo
 
-  const {navigate, token} = useAppContext()
   return (
-    <div className="flex justify-between items-center py-5 px-8 sm:mx-20 xl:mx-32 ">
-      <div className="flex items-center">
-        <img
-          onClick={() => navigate("/")}
-          src={assets.logo}
-          alt="Logo"
-          className="w-32 sm:w-44 cursor-pointer"
-        />
-        <h1>PopCultureQuest</h1>
-      </div>
-      <button
-        onClick={() => navigate("/admin")}
-        className="flex items-center gap-2 rounded-full text-sm cursor-pointer bg-primary text-dark-text px-10 py-2.5"
+    <nav className="flex justify-between items-center py-5 px-8 sm:mx-20 xl:mx-32">
+      {/* 2. On enveloppe le logo ET le titre dans un Link pour une meilleure UX */}
+      <Link
+        to="/"
+        className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+        aria-label="Retour à l'accueil"
       >
-        {token ? 'Tableau de bord' : 'Login'}
-        <img src={assets.arrow} className="w-3 text-dark-text" alt="arrow" />
-      </button>
-    </div>
+        <img
+          src={assets.logo}
+          alt="" // Alt vide ici car le texte est déjà dans le aria-label du parent
+          className="w-32 sm:w-44"
+        />
+        <h1 className="text-xl font-bold">PopCultureQuest</h1>
+      </Link>
+
+      {/* 3. Pour le bouton Admin, Link est aussi préférable à onClick pour le SEO */}
+      <Link
+        to="/admin"
+        className="flex items-center gap-2 rounded-full text-sm bg-primary text-dark-text px-10 py-2.5 hover:bg-primary/90 transition-all active:scale-95"
+      >
+        {token ? "Tableau de bord" : "Login"}
+        <img src={assets.arrow} className="w-3" alt="" />
+      </Link>
+    </nav>
   );
 };
 
