@@ -1,18 +1,16 @@
 import { useAppContext } from "../../context/AppContext";
-import React, { useRef } from "react"; // On remplace useState par useRef
+import React, { useRef } from "react";
 import toast from "react-hot-toast";
 
 const Login = () => {
   const { axios, setToken } = useAppContext();
-  
-  // On utilise des refs au lieu du state
+
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // On récupère les valeurs uniquement au moment de la soumission
+
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
@@ -47,11 +45,16 @@ const Login = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-6 w-full sm:max-w-md text-foreground-600">
+          <form
+            onSubmit={handleSubmit}
+            className="mt-6 w-full sm:max-w-md text-foreground-600"
+          >
             <div className="flex flex-col">
-              <label>Email</label>
+              {/* 1. Liaison du label Email */}
+              <label htmlFor="email">Email</label>
               <input
-                ref={emailRef} // On lie la ref ici
+                id="email" // L'id doit correspondre au htmlFor
+                ref={emailRef}
                 type="email"
                 required
                 placeholder="Votre adresse mail"
@@ -60,9 +63,11 @@ const Login = () => {
             </div>
 
             <div className="flex flex-col">
-              <label>Mot de passe</label>
+              {/* 2. Liaison du label Mot de passe */}
+              <label htmlFor="password">Mot de passe</label>
               <input
-                ref={passwordRef} // On lie la ref ici
+                id="password" // L'id doit correspondre au htmlFor
+                ref={passwordRef}
                 type="password"
                 required
                 placeholder="Votre mot de passe"
