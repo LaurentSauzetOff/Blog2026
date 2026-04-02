@@ -1,6 +1,7 @@
 import { assets } from "assets/assets";
 import { useAppContext } from "context/AppContext";
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types"; // 1. Import indispensable
 import toast from "react-hot-toast";
 
@@ -79,32 +80,24 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
         </td>
       </tr>
 
-      {isModalOpen && (
+      {isModalOpen && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
           <div className="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full mx-4 border border-gray-200">
             <h2 className="text-xl font-bold text-gray-800">Attention !</h2>
             <p className="mt-2 text-gray-600 leading-relaxed">
-              Êtes-vous sûr de vouloir supprimer cet article ? <br />
-              <span className="text-sm font-medium text-primary">
-                "Non mais allo quoi !"
-              </span>
+              Êtes-vous sûr de vouloir supprimer cet article ?
             </p>
             <div className="mt-6 flex justify-end gap-3">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
-              >
+              <button onClick={() => setIsModalOpen(false)} className="...">
                 Annuler
               </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm transition-colors cursor-pointer"
-              >
-                Confirmer la suppression
+              <button onClick={confirmDelete} className="...">
+                Confirmer
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body // On l'envoie directement dans le body
       )}
     </>
   );
