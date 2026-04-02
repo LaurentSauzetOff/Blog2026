@@ -1,8 +1,16 @@
 import { assets, blogCategories } from "assets/assets";
 import React, { useEffect, useRef, useState } from "react";
 import Quill from "quill";
+import { useAppContext } from "context/AppContext";
+import toast from "react-hot-toast";
+import { parse } from "marked";
+import { div } from "motion/react-client";
 
 const AddBlog = () => {
+  const { axios } = useAppContext();
+  const [isAdding, setIsAdding] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const editorRef = useRef(null);
   const quillRef = useRef(null);
 
@@ -12,10 +20,87 @@ const AddBlog = () => {
   const [category, setCategory] = useState("Startup");
   const [isPublished, setIsPublished] = useState(false);
 
-  const generateContent = async () => {};
+  const generateContent = async () => {
+    if (!title) return toast.error("Vous devez entrer un titre");
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/api/blog/generate", {
+        prompt: title,
+      });
+      if (data.success) {
+        quillRef.current.root.innerHTML = parse(data.content);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+ /*  const generateContent = async () => {
+    if (!title) return toast.error("Vous devez entrer un titre");
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/api/blog/generate", {
+        prompt: title,
+      });
+
+      console.log("Réponse du serveur :", data); // <--- AJOUTE CECI
+
+      if (data.success) {
+        const htmlContent = parse(data.content);
+        console.log("HTML parsé :", htmlContent); // <--- ET CECI
+
+        if (quillRef.current) {
+          quillRef.current.clipboard.dangerouslyPasteHTML(htmlContent);
+        }
+      } else {
+        // Si on arrive ici, c'est que le backend a dit success: false
+        toast.error(data.message || "Le serveur a refusé la génération");
+      }
+    } catch (error) {
+      console.error("Erreur Axios :", error);
+      toast.error("Problème de connexion au serveur");
+    } finally {
+      setLoading(false);
+    }
+  }; */
 
   const onSubmitHandler = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      setIsAdding(true);
+
+      const blog = {
+        title,
+        subTitle,
+        description: quillRef.current.root.innerHTML,
+        category,
+        isPublished,
+      };
+
+      const formData = new FormData();
+      formData.append("blog", JSON.stringify(blog));
+      formData.append("image", image);
+
+      const { data } = await axios.post("/api/blog/add", formData);
+
+      if (data.success) {
+        toast.success(data.message);
+        setImage(false);
+        setTitle("");
+        quillRef.current.root.innerHMLT = "";
+        setCategory("Startup");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   useEffect(() => {
@@ -69,7 +154,15 @@ const AddBlog = () => {
         <p className="mt-4">Description</p>
         <div className="max-w-lg h-74 pb-16 sm:pb-10 pt-2 relative">
           <div ref={editorRef}></div>
+          {loading && (
+            <div className="absolute right-0 top-0 bottom-0 left-0 flex items-center justify-center bg-red mt-2"> 
+              <div className="w-8 h-8 rounded-full border-2 border-t-white animate-spin">
+
+              </div>
+            </div>
+          )}
           <button
+            disabled={loading}
             type="button"
             onClick={generateContent}
             className="absolute bottom-1 right-2 ml-2 text-xs text-dark-text bg-primary/70 px-4 py-1.5 rounded hover:underline cursor-pointer"
@@ -107,10 +200,11 @@ const AddBlog = () => {
         </div>
 
         <button
+          disabled={isAdding}
           type="submit"
           className="mt-8 w-40 h-10 bg-primary text-dark-text rounded cursor-pointer text-sm"
         >
-          Ajouter l'article
+          {isAdding ? "Ajout..." : "Ajouter l'article"}
         </button>
       </div>
     </form>
