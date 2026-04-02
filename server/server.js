@@ -11,7 +11,7 @@ app.disable('x-powered-by');
 
 await connectedDB();
 
-const allowedOrigins = ["http://localhost:5173", "https://blog2026-omega.vercel.app/"];
+const allowedOrigins = ["http://localhost:5173", "https://blog2026-omega.vercel.app"];
 
 // Middleware
 app.use(
