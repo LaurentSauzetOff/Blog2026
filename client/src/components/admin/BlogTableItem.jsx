@@ -1,6 +1,7 @@
 import { assets } from "assets/assets";
 import { useAppContext } from "context/AppContext";
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types"; // 1. Import indispensable
 import toast from "react-hot-toast";
 
@@ -79,33 +80,41 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
         </td>
       </tr>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-          <div className="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full mx-4 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-800">Attention !</h2>
-            <p className="mt-2 text-gray-600 leading-relaxed">
-              Êtes-vous sûr de vouloir supprimer cet article ? <br />
-              <span className="text-sm font-medium text-primary">
-                "Non mais allo quoi !"
-              </span>
-            </p>
-            <div className="mt-6 flex justify-end gap-3">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
-              >
-                Annuler
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm transition-colors cursor-pointer"
-              >
-                Confirmer la suppression
-              </button>
+      {isModalOpen &&
+        createPortal(
+          // 1. On passe le z-index à 999 pour être au-dessus de TOUT (Sidebar, Navbar, etc.)
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+            {/* 2. On ajoute onClick={(e) => e.stopPropagation()} pour éviter que le clic 
+           sur la boîte blanche ne soit confondu avec un clic sur le fond */}
+            <div
+              className="relative z-[1000] bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full mx-4 border border-gray-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-xl font-bold text-gray-800">Attention !</h2>
+              <p className="mt-2 text-gray-600 leading-relaxed">
+                Êtes-vous sûr de vouloir supprimer cet article ?
+              </p>
+
+              <div className="mt-6 flex justify-end gap-3">
+                <button
+                  type="button" // 3. Toujours préciser le type pour éviter les soumissions de formulaires fantômes
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmDelete}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm transition-colors cursor-pointer font-medium"
+                >
+                  Confirmer la suppression
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </>
   );
 };
