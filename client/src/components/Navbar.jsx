@@ -14,12 +14,7 @@ const Navbar = () => {
         className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
         aria-label="Retour à l'accueil"
       >
-        <img
-          src={assets.logo}
-          alt="" // Alt vide ici car le texte est déjà dans le aria-label du parent
-          className="w-32 sm:w-44"
-        />
-        <h1 className="text-xl font-bold">PopCultureQuest</h1>
+        <h1 className="text-3xl tracking-tight font-bold">PopCultureQuest</h1>
       </Link>
 
       {/* 3. Pour le bouton Admin, Link est aussi préférable à onClick pour le SEO */}
