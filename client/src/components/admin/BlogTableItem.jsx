@@ -126,3 +126,4 @@ BlogTableItem.propTypes = {
 };
 
 export default BlogTableItem;
+// it's ok
