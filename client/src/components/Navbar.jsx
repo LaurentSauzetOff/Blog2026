@@ -21,7 +21,7 @@ const Navbar = () => {
         onClick={() => navigate("/admin")}
         className="flex items-center gap-2 rounded-full text-sm cursor-pointer bg-primary text-dark-text px-10 py-2.5"
       >
-        {token ? 'Dashboard' : 'Login'}
+        {token ? 'Tableau de bord' : 'Login'}
         <img src={assets.arrow} className="w-3 text-dark-text" alt="arrow" />
       </button>
     </div>

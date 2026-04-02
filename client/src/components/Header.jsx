@@ -19,11 +19,6 @@ const Header = () => {
   return (
     <div className="mx-8 sm:mx-16 xl:mx-24 relative">
       <div className="text-center mt-20 mb-8">
-        <div className="inline-flex items-center justify-center gap-4 px-6 py-1.5 mb-4 border border-primary/40 bg-primary/10 rounded-full text-sm">
-          <p>Nouveauté: fonctionnalité IA intégrée</p>
-          <img src={assets.star_icon} className="w-2.5" alt="" />
-        </div>
-
         <h1 className="text-3xl sm:text-6xl font-semibold sm:leading-16 text-foreground">
           LE blog sur la culture <br />{" "}
           <span className="text-primary" /* style={{ color: "#00FF00" }} */>
