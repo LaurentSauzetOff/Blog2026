@@ -1,13 +1,14 @@
 import { assets } from "assets/assets";
 import { useAppContext } from "context/AppContext";
-import { img } from "motion/react-client";
 import React from "react";
+import PropTypes from "prop-types"; // 1. L'import pour SonarCloud
 import toast from "react-hot-toast";
 
 const CommentTableItem = ({ comment, fetchComments }) => {
   const { axios } = useAppContext();
 
-  const { blog, createdAt, _id } = comment;
+  // Déstructuration sécurisée
+  const { blog, createdAt, _id, name, content, isApproved } = comment;
   const BlogDate = new Date(createdAt);
 
   const approveComment = async () => {
@@ -48,43 +49,67 @@ const CommentTableItem = ({ comment, fetchComments }) => {
   };
 
   return (
-    <tr className="order-y border-gray-300">
+    <tr className="border-y border-gray-300">
       <td className="px-6 py-4">
         <b className="font-medium text-foreground-600">Article</b> :{" "}
         {blog.title}
         <br />
         <br />
-        <b className="font-medium text-foreground-600">Nom</b> : {comment.name}
+        <b className="font-medium text-foreground-600">Nom</b> : {name}
         <br />
         <b className="font-medium text-foreground-600">Commentaire</b> :{" "}
-        {comment.content}
+        {content}
       </td>
       <td className="px-6 py-4 max-sm:hidden">
         {BlogDate.toLocaleDateString()}
       </td>
       <td className="px-6 py-4">
         <div className="inline-flex items-center gap-4">
-          {!comment.isApproved ? (
-            <img
+          {!isApproved ? (
+            <button
               onClick={approveComment}
-              src={assets.tick_icon}
-              className="w-5 hover:scale-110 transition-all cursor-pointer"
-            />
+              className="cursor-pointer hover:scale-110 transition-all p-1"
+              title="Approuver le commentaire"
+              aria-label="Approuver le commentaire"
+            >
+              <img src={assets.tick_icon} className="w-5" alt="" />
+            </button>
           ) : (
             <p className="text-xs border border-green-600 bg-green-100 text-green-600 rounded-full px-3 py-1">
               Validé
             </p>
           )}
-          <img
+
+          <button
             onClick={deleteComment}
-            src={assets.bin_icon}
-            className="w-5 hover:scale-110 transition-all cursor-pointer invert"
-            alt=""
-          />
+            className="cursor-pointer hover:scale-110 transition-all p-1"
+            title="Supprimer le commentaire"
+            aria-label="Supprimer le commentaire"
+          >
+            <img src={assets.bin_icon} className="w-5 invert" alt="" />
+          </button>
         </div>
       </td>
     </tr>
   );
+};
+
+// 2. LA FIX SONARCLOUD : Schéma de validation complet
+CommentTableItem.propTypes = {
+  comment: PropTypes.shape({
+    blog: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+    }).isRequired,
+    createdAt: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]).isRequired,
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    isApproved: PropTypes.bool.isRequired,
+  }).isRequired,
+  fetchComments: PropTypes.func.isRequired,
 };
 
 export default CommentTableItem;
