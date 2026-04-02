@@ -76,60 +76,45 @@ export const getAllBlogs = async (req, res) => {
 
 export const getBlogById = async (req, res) => {
   try {
-    const { blogId } = req.params;
+    // Sécurisation : on force blogId en chaîne de caractères
+    const blogId = String(req.params.blogId);
     const blog = await Blog.findById(blogId);
+
     if (!blog) {
-      return res.json({
-        success: false,
-        message: "Article non trouvé",
-      });
+      return res.json({ success: false, message: "Article non trouvé" });
     }
-    res.json({
-      success: true,
-      blog,
-    });
+    res.json({ success: true, blog });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    res.json({ success: false, message: error.message });
   }
 };
 
 export const deleteBlogById = async (req, res) => {
   try {
-    const { id } = req.body;
-    await Blog.findByIdAndDelete(id);
+    // Sécurisation : on force l'ID en String pour éviter les objets malveillants
+    const id = String(req.body.id);
 
+    await Blog.findByIdAndDelete(id);
+    // C'est ici que SonarCloud bloquait !
     await Comment.deleteMany({ blog: id });
 
-    res.json({
-      success: true,
-      message: "Article supprimé avec succès",
-    });
+    res.json({ success: true, message: "Article supprimé avec succès" });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    res.json({ success: false, message: error.message });
   }
 };
 
 export const togglePublish = async (req, res) => {
   try {
-    const { id } = req.body;
+    const id = String(req.body.id);
     const blog = await Blog.findById(id);
+    if (!blog) return res.json({ success: false, message: "Blog non trouvé" });
+
     blog.isPublished = !blog.isPublished;
     await blog.save();
-    res.json({
-      success: true,
-      message: "Statut de publication mis à jour avec succès",
-    });
+    res.json({ success: true, message: "Statut mis à jour" });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -151,20 +136,16 @@ export const addComment = async (req, res) => {
 
 export const getBlogComments = async (req, res) => {
   try {
-    const { blogId } = req.body;
+    // Sécurisation ici aussi
+    const blogId = String(req.body.blogId);
     const comments = await Comment.find({
       blog: blogId,
       isApproved: true,
     }).sort({ createdAt: -1 });
-    res.json({
-      success: true,
-      comments,
-    });
+
+    res.json({ success: true, comments });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    });
+    res.json({ success: false, message: error.message });
   }
 };
 
