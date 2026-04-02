@@ -91,7 +91,7 @@ const AddBlog = () => {
           <p className="mb-2">Ajouter une image</p>
           <img
             src={!image ? assets.upload_area : URL.createObjectURL(image)}
-            alt="Cliquez pour uploader une image de couverture"
+            alt="Couverture de l'article"
             className="h-16 rounded object-cover"
           />
           <input
