@@ -1,20 +1,21 @@
 import { assets } from "assets/assets";
 import { useAppContext } from "context/AppContext";
-import React, { useState } from "react"; // On ajoute useState
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const BlogTableItem = ({ blog, fetchBlogs, index }) => {
   const { axios } = useAppContext();
-  const [isModalOpen, setIsModalOpen] = useState(false); // État pour la modale
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 1. Cette fonction ouvre juste la modale (Action ultra rapide pour Vercel)
-  const openConfirm = () => setIsModalOpen(true);
+  const { title, createdAt, isPublished, _id } = blog;
+  const BlogDate = new Date(createdAt);
 
-  // 2. La vraie logique de suppression
-  const confirmDelete = async () => {
-    setIsModalOpen(false); // On ferme la modale
+  // Fonction pour changer le statut de publication
+  const togglePublish = async () => {
     try {
-      const { data } = await axios.post("/api/blog/delete", { id: blog._id });
+      const { data } = await axios.post("/api/blog/toggle-publish", {
+        id: _id,
+      });
       if (data.success) {
         toast.success(data.message);
         await fetchBlogs();
@@ -22,7 +23,23 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error("Erreur lors de la suppression");
+      toast.error(error.message);
+    }
+  };
+
+  // Logique de suppression avec modale
+  const confirmDelete = async () => {
+    setIsModalOpen(false);
+    try {
+      const { data } = await axios.post("/api/blog/delete", { id: _id });
+      if (data.success) {
+        toast.success(data.message);
+        await fetchBlogs();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -30,43 +47,61 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
     <>
       <tr className="border-y border-gray-300">
         <th className="px-2 py-4">{index}</th>
-        <td className="px-2 py-4">{blog.title}</td>
+        <td className="px-2 py-4">{title}</td>
+
+        {/* Colonne Date */}
+        <td className="px-2 py-4 max-sm:hidden">{BlogDate.toDateString()}</td>
+
+        {/* Colonne Statut (Celle qui manquait !) */}
         <td className="px-2 py-4 max-sm:hidden">
-          {new Date(blog.createdAt).toDateString()}
-        </td>
-        <td className="px-2 py-4 max-sm:hidden text-center">
-          <button
-            onClick={openConfirm} // On appelle l'ouverture de la modale
-            className="hover:scale-110 transition-all cursor-pointer"
+          <p
+            className={`${isPublished ? "text-green-600" : "text-orange-700"} font-medium`}
           >
-            <img src={assets.cross_icon} className="w-8" alt="Supprimer" />
+            {isPublished ? "Published" : "Unpublished"}
+          </p>
+        </td>
+
+        {/* Colonne Actions (Toggle + Delete) */}
+        <td className="px-2 py-4 flex items-center text-xs gap-3">
+          <button
+            onClick={togglePublish}
+            className="border px-2 py-0.5 rounded cursor-pointer hover:bg-gray-50 transition-colors"
+          >
+            {isPublished ? "Unpublish" : "Publish"}
           </button>
+
+          <img
+            onClick={() => setIsModalOpen(true)}
+            src={assets.cross_icon}
+            className="w-8 hover:scale-110 transition-all cursor-pointer"
+            alt="Supprimer"
+          />
         </td>
       </tr>
 
-      {/* MODALE DE CONFIRMATION PERSONNALISÉE */}
+      {/* Ma modale de validation (Invisible par défaut) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4 text-dark-text">
-            <h2 className="text-xl font-bold text-gray-800">Confirmation</h2>
-            <p className="mt-2 text-gray-600">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+          <div className="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full mx-4 border border-gray-200">
+            <h2 className="text-xl font-bold text-gray-800">Attention !</h2>
+            <p className="mt-2 text-gray-600 leading-relaxed">
               Êtes-vous sûr de vouloir supprimer cet article ? <br />
-              <span className="text-xs italic text-gray-400">
+              <span className="text-sm font-medium text-primary">
                 "Non mais allo quoi !"
               </span>
             </p>
             <div className="mt-6 flex justify-end gap-3">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded"
+                className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
               >
                 Annuler
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 shadow-sm transition-colors"
               >
-                Supprimer
+                Confirmer la suppression
               </button>
             </div>
           </div>
