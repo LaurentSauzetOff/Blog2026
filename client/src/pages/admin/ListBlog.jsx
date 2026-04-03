@@ -1,4 +1,3 @@
-import { blog_data } from "assets/assets";
 import React, { useEffect, useState } from "react";
 import BlogTableItem from "../../components/admin/BlogTableItem";
 import { useAppContext } from "context/AppContext";

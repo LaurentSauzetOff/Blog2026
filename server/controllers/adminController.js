@@ -98,7 +98,10 @@ export const deleteCommentById = async (req, res) => {
 export const approveCommentById = async (req, res) => {
   try {
     const { id } = req.body;
-    const comment = await Comment.findByIdAndUpdate(id, { isApproved: true });
+
+    // FIX SONARCLOUD : On exécute l'action sans stocker le résultat inutilement
+    await Comment.findByIdAndUpdate(id, { isApproved: true });
+
     res.json({
       success: true,
       message: "Commentaire approuvé avec succès",

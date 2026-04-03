@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { assets, blog_data, comments_data } from "../assets/assets";
+import { assets } from "../assets/assets";
 import Moment from "moment";
 import Footer from "./../components/Footer";
 import Loader from "../components/Loader";
@@ -94,7 +94,7 @@ const Blog = () => {
           <div className="flex flex-col gap-4">
             {comments.map((item, index) => (
               <div
-                key={index}
+                key={item._id}
                 className="relative bg-primary/2 border border-primary/5 max-w-xl p-4 rounded text-foreground-600"
               >
                 <div className="flex items-center gap-2 mb-2">

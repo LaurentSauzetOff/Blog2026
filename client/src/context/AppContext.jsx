@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react"; // Ajout de useMemo
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import PropTypes from "prop-types"; // 1. On importe PropTypes
+import PropTypes from "prop-types";
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -18,38 +18,45 @@ export const AppProvider = ({ children }) => {
   const fetchBlogs = async () => {
     try {
       const { data } = await axios.get("/api/blog/all");
-      data.success ? setBlogs(data.blogs) : toast.error(data.message);
+      if (data.success) {
+        setBlogs(data.blogs);
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   useEffect(() => {
-    // On récupère le token d'abord
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
       axios.defaults.headers.common["Authorization"] = `${storedToken}`;
     }
-    // Puis on charge les données
     fetchBlogs();
   }, []);
 
-  const value = {
-    axios,
-    navigate,
-    token,
-    setToken,
-    blogs,
-    setBlogs,
-    input,
-    setInput,
-  };
+  // --- FIX SONARCLOUD : Mémorisation de l'objet value ---
+  const value = useMemo(
+    () => ({
+      axios,
+      navigate,
+      token,
+      setToken,
+      blogs,
+      setBlogs,
+      input,
+      setInput,
+    }),
+    [token, blogs, input, navigate],
+  );
+  // On liste les dépendances qui, si elles changent, doivent mettre à jour le contexte.
+  // -----------------------------------------------------
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-// 2. LA FIX SONARCLOUD : On valide que children est présent
 AppProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };

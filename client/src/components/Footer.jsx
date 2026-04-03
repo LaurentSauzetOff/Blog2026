@@ -20,7 +20,7 @@ const Footer = () => {
 
         <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
           {footer_data.map((section, index) => (
-            <div key={index}>
+            <div key={section.title + index} className="min-w-[120px]">
               <h3 className="font-semibold text-base text-foreground-900 md:mb-5 mb-2">
                 {section.title}
               </h3>
@@ -28,7 +28,7 @@ const Footer = () => {
                 className={`flex ${section.title === "Suivez-nous" ? "flex-row gap-4" : "flex-col space-y-1"}`}
               >
                 {section.links.map((link, i) => (
-                  <li key={i}>
+                  <li key={typeof link === "string" ? link : link + i}>
                     <Link
                       className="hover:underline transition hover:text-primary"
                       to="#" // Garde # pour l'instant pour satisfaire SonarCloud
