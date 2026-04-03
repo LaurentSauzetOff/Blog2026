@@ -87,6 +87,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
             {/* 2. On ajoute onClick={(e) => e.stopPropagation()} pour éviter que le clic 
            sur la boîte blanche ne soit confondu avec un clic sur le fond */}
             <div
+            role="button"
               className="relative z-[1000] bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full mx-4 border border-gray-200"
               onClick={(e) => e.stopPropagation()}
             >

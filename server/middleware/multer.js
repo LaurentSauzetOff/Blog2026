@@ -1,6 +1,6 @@
 import multer from "multer";
-import os from "os";
-import crypto from "crypto"; // Module natif de Node.js
+import os from "node:os";
+import crypto from "node:crypto"; // Module natif de Node.js
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

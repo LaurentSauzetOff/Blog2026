@@ -1,7 +1,7 @@
 import { assets } from "assets/assets";
 import { useAppContext } from "context/AppContext";
 import React from "react";
-import PropTypes from "prop-types"; // 1. L'import pour SonarCloud
+import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 
 const CommentTableItem = ({ comment, fetchComments }) => {
@@ -29,7 +29,7 @@ const CommentTableItem = ({ comment, fetchComments }) => {
 
   const deleteComment = async () => {
     try {
-      const confirm = window.confirm(
+      const confirm = globalThis.confirm(
         "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
       );
       if (!confirm) return;
@@ -65,7 +65,12 @@ const CommentTableItem = ({ comment, fetchComments }) => {
       </td>
       <td className="px-6 py-4">
         <div className="inline-flex items-center gap-4">
-          {!isApproved ? (
+          {/* FIX SONARCLOUD : On retire le '!' et on inverse les blocs */}
+          {isApproved ? (
+            <p className="text-xs border border-green-600 bg-green-100 text-green-600 rounded-full px-3 py-1">
+              Validé
+            </p>
+          ) : (
             <button
               onClick={approveComment}
               className="cursor-pointer hover:scale-110 transition-all p-1"
@@ -74,10 +79,6 @@ const CommentTableItem = ({ comment, fetchComments }) => {
             >
               <img src={assets.tick_icon} className="w-5" alt="" />
             </button>
-          ) : (
-            <p className="text-xs border border-green-600 bg-green-100 text-green-600 rounded-full px-3 py-1">
-              Validé
-            </p>
           )}
 
           <button
@@ -94,7 +95,6 @@ const CommentTableItem = ({ comment, fetchComments }) => {
   );
 };
 
-// 2. LA FIX SONARCLOUD : Schéma de validation complet
 CommentTableItem.propTypes = {
   comment: PropTypes.shape({
     blog: PropTypes.shape({

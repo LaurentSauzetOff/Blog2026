@@ -90,7 +90,7 @@ const AddBlog = () => {
         <label htmlFor="image" className="block cursor-pointer">
           <p className="mb-2">Ajouter une image</p>
           <img
-            src={!image ? assets.upload_area : URL.createObjectURL(image)}
+            src={image ? URL.createObjectURL(image) : assets.upload_area}
             alt="Couverture de l'article"
             className="h-16 rounded object-cover"
           />
@@ -172,7 +172,7 @@ const AddBlog = () => {
               Sélectionner une catégorie
             </option>
             {blogCategories.map((item, index) => (
-              <option className="bg-background" value={item} key={index}>
+              <option className="bg-background" value={item} key={item + index}>
                 {item}
               </option>
             ))}
