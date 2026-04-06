@@ -101,7 +101,6 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
            sur la boîte blanche ne soit confondu avec un clic sur le fond */}
             <dialog
               ref={dialogRef}
-              role="dialog"
               aria-modal="true"
               tabIndex={0}
               onKeyDown={(event) => {
