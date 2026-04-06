@@ -83,20 +83,13 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
       {isModalOpen &&
         createPortal(
           // 1. On passe le z-index à 999 pour être au-dessus de TOUT (Sidebar, Navbar, etc.)
-          <div
-            role="button"
-            tabIndex={0}
-            aria-label="Fermer le dialogue"
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-[2px]"
-            onClick={() => setIsModalOpen(false)}
-            onKeyDown={(event) => {
-              const key = event.key;
-              if (key === "Enter" || key === " " || key === "Spacebar" || key === "Escape") {
-                event.preventDefault();
-                setIsModalOpen(false);
-              }
-            }}
-          >
+          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+            <button
+              type="button"
+              aria-label="Fermer le dialogue"
+              className="absolute inset-0 bg-transparent border-none p-0 m-0 cursor-default focus:outline-none"
+              onClick={() => setIsModalOpen(false)}
+            />
             {/* 2. On ajoute onClick={(e) => e.stopPropagation()} pour éviter que le clic 
            sur la boîte blanche ne soit confondu avec un clic sur le fond */}
             <dialog
