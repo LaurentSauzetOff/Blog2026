@@ -1,6 +1,6 @@
 import { assets } from "assets/assets";
 import { useAppContext } from "context/AppContext";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types"; // 1. Import indispensable
 import toast from "react-hot-toast";
@@ -8,6 +8,13 @@ import toast from "react-hot-toast";
 const BlogTableItem = ({ blog, fetchBlogs, index }) => {
   const { axios } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    if (isModalOpen && dialogRef.current) {
+      dialogRef.current.focus();
+    }
+  }, [isModalOpen]);
 
   // Sécurité : on s'assure que blog existe
   const { title, createdAt, isPublished, _id } = blog;
@@ -93,9 +100,10 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
             {/* 2. On ajoute onClick={(e) => e.stopPropagation()} pour éviter que le clic 
            sur la boîte blanche ne soit confondu avec un clic sur le fond */}
             <dialog
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
-              tabIndex={-1}
+              tabIndex={0}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
                   event.preventDefault();
