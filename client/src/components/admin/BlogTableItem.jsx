@@ -89,7 +89,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
           >
             {/* 2. On ajoute onClick={(e) => e.stopPropagation()} pour éviter que le clic 
            sur la boîte blanche ne soit confondu avec un clic sur le fond */}
-            <div
+            <dialog
               role="dialog"
               aria-modal="true"
               tabIndex={-1}
@@ -117,7 +117,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
                   Confirmer la suppression
                 </button>
               </div>
-            </div>
+            </dialog>
           </div>,
           document.body,
         )}
