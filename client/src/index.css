@@ -99,6 +99,17 @@
   transition: color 0.2s ease;
 }
 
+/* Glow effect pour les cards du blog */
+.blog-card-glow {
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.1), 0 0 40px rgba(0, 255, 0, 0.05);
+  transition: all 0.5s ease;
+}
+
+.blog-card-glow:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.3), 0 0 60px rgba(0, 255, 0, 0.15), 0 0 90px rgba(0, 255, 0, 0.1);
+  transform: translateY(-2px);
+}
+
 .rich-text a:hover {
   color: #00ff00;
 }

@@ -13,7 +13,16 @@ import { Toaster } from "react-hot-toast";
 import { useAppContext } from "./context/AppContext";
 
 const App = () => {
-  const {token} = useAppContext()
+  const {token, isLoading} = useAppContext()
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-8 h-8 rounded-full border-2 border-t-primary animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background text-foreground">
       <Toaster/>

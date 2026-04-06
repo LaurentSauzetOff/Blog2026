@@ -4,12 +4,16 @@ import cors from "cors";
 import connectedDB from "./configs/db.js";
 import adminRouter from "./routes/adminRoutes.js";
 import blogRouter from "./routes/blogRoutes.js";
+import { startScheduler } from "./utils/scheduler.js";
 
 const app = express();
 
 app.disable("x-powered-by");
 
 await connectedDB();
+
+// Démarrer le scheduler pour les publications programmées
+startScheduler();
 
 const allowedOrigins = new Set([
   "http://localhost:5173",

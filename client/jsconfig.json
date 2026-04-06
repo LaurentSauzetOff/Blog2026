@@ -3,7 +3,7 @@
         "module": "esnext",
         "target": "esnext",
         "jsx": "react-jsx",
-        "checkJs": true,
+        "checkJs": false,
         "baseUrl": "./src",
         "moduleResolution": "bundler"
     },
