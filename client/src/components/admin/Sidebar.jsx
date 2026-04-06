@@ -7,8 +7,8 @@ const Sidebar = () => {
   const navLinkClass = ({ isActive }) =>
     `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-64 cursor-pointer transition-all ${
       isActive
-        ? "bg-background/10 border-r-4 border-primary text-primary"
-        : "text-foreground-600 hover:bg-gray-50"
+        ? "bg-primary text-dark-text"
+        : "text-foreground-600 hover:bg-primary hover:text-dark-text"
     }`;
 
   return (

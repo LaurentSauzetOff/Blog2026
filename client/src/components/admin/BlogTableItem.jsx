@@ -17,7 +17,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
   }, [isModalOpen]);
 
   // Sécurité : on s'assure que blog existe
-  const { title, createdAt, isPublished, _id } = blog;
+  const { title, createdAt, isPublished, _id, scheduledDate } = blog;
   const BlogDate = new Date(createdAt);
 
   const togglePublish = async () => {
@@ -61,16 +61,22 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
 
         <td className="px-2 py-4 max-sm:hidden">
           <p
-            className={`${isPublished ? "text-green-600" : "text-orange-700"} font-medium`}
+            className={`${isPublished ? "text-green-600" : scheduledDate ? "text-blue-600" : "text-orange-700"} font-medium`}
           >
-            {isPublished ? "Published" : "Unpublished"}
+            {isPublished ? "Published" : scheduledDate ? `Scheduled for ${new Date(scheduledDate).toLocaleString()}` : "Unpublished"}
           </p>
         </td>
 
         <td className="px-2 py-4 flex items-center text-xs gap-3">
           <button
             onClick={togglePublish}
-            className="border px-2 py-0.5 rounded cursor-pointer hover:bg-gray-50 transition-colors"
+            disabled={scheduledDate && !isPublished}
+            className={`border px-2 py-0.5 rounded cursor-pointer transition-colors ${
+              scheduledDate && !isPublished
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-50"
+            }`}
+            title={scheduledDate && !isPublished ? "Cet article est programmé pour publication automatique" : ""}
           >
             {isPublished ? "Unpublish" : "Publish"}
           </button>

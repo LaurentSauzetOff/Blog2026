@@ -7,7 +7,7 @@ const Comments = () => {
   const { axios } = useAppContext();
 
   const [comments, setComments] = useState([]);
-  const [filter, setFilter] = useState("not approved");
+  const [filter, setFilter] = useState("Approved");
 
   const fetchComments = async () => {
     try {

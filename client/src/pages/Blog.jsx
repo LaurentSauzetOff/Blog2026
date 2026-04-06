@@ -72,7 +72,7 @@ const Blog = () => {
       <Navbar />
       <div className="text-center mt-20 text-foreground-600">
         <p className="text-primary py-4 font-medium">
-          Publié le {Moment(data.CreatedAt).format("DD/MMMM/YYYY")}
+          Publié le {Moment(data.createdAt).format("DD/MMMM/YYYY")}
         </p>
         <h1 className="text-2xl sm:text-5xl font-semiboldmax-w-2xl mx-auto">
           {data.title}
@@ -103,7 +103,7 @@ const Blog = () => {
                 </div>
                 <p className="text-sm max-w-md ml-8">{item.content}</p>
                 <div className="absolute right-4 bottom-3 flex items-center gap-2 text-xs">
-                  {Moment(item.CreatedAt).fromNow()}
+                  {Moment(item.createdAt).fromNow()}
                 </div>
               </div>
             ))}

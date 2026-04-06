@@ -46,7 +46,7 @@ const Layout = () => {
       {/* 4. Contenu principal avec la Sidebar */}
       <div className="flex h-[calc(100vh-100px)]">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto bg-gray-50/50">
+        <main className="flex-1 overflow-y-auto bg-background">
           <Outlet />
         </main>
       </div>

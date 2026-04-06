@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import mongoose from "mongoose";
 import imagekit from "../configs/imageKit.js";
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
@@ -6,7 +7,7 @@ import main from "../configs/gemini.js";
 
 export const addBlog = async (req, res) => {
   try {
-    const { title, subTitle, description, category, isPublished } = JSON.parse(
+    const { title, subTitle, description, category, isPublished, scheduledDate } = JSON.parse(
       req.body.blog,
     );
     const imageFile = req.file;
@@ -18,12 +19,42 @@ export const addBlog = async (req, res) => {
       });
     }
 
-    const fileBuffer = fs.readFileSync(imageFile.path);
-    const response = await imagekit.upload({
-      file: fileBuffer,
-      fileName: imageFile.originalname,
-      folder: "/blog_images",
-    });
+    if (!isPublished && !scheduledDate) {
+      return res.json({
+        success: false,
+        message: "Veuillez programmer une date de publication ou publier maintenant",
+      });
+    }
+
+    let fileBuffer;
+    try {
+      fileBuffer = fs.readFileSync(imageFile.path);
+    } catch (err) {
+      return res.json({
+        success: false,
+        message: "Impossible de lire le fichier image",
+      });
+    }
+
+    let response;
+    try {
+      response = await imagekit.upload({
+        file: fileBuffer,
+        fileName: imageFile.originalname,
+        folder: "/blog_images",
+      });
+    } catch (err) {
+      // Nettover le fichier temporaire en cas d'erreur d'upload
+      try {
+        fs.unlinkSync(imageFile.path);
+      } catch (cleanupErr) {
+        // Ignorer les erreurs de nettoyage
+      }
+      return res.json({
+        success: false,
+        message: "Erreur lors de l'upload de l'image. Réessayez.",
+      });
+    }
 
     const optimizedImageUrl = imagekit.url({
       path: response.filePath,
@@ -37,14 +68,35 @@ export const addBlog = async (req, res) => {
 
     const image = optimizedImageUrl;
 
-    await Blog.create({
-      title,
-      subTitle,
-      description,
-      category,
-      image,
-      isPublished,
-    });
+    try {
+      await Blog.create({
+        title,
+        subTitle,
+        description,
+        category,
+        image,
+        isPublished,
+        scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
+      });
+    } catch (err) {
+      // Nettoyer le fichier temporaire en cas d'erreur de création
+      try {
+        fs.unlinkSync(imageFile.path);
+      } catch (cleanupErr) {
+        // Ignorer les erreurs de nettoyage
+      }
+      return res.json({
+        success: false,
+        message: "Erreur lors de la création de l'article. Réessayez.",
+      });
+    }
+
+    // Nettoyer le fichier temporaire après succès
+    try {
+      fs.unlinkSync(imageFile.path);
+    } catch (cleanupErr) {
+      // Ignorer les erreurs de nettoyage
+    }
 
     res.json({
       success: true,
@@ -75,8 +127,16 @@ export const getAllBlogs = async (req, res) => {
 
 export const getBlogById = async (req, res) => {
   try {
-    // Sécurisation : on force blogId en chaîne de caractères
-    const blogId = String(req.params.blogId);
+    const blogId = req.params.blogId;
+
+    // Valider que l'ID est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(blogId)) {
+      return res.json({ 
+        success: false, 
+        message: "Article non trouvé" 
+      });
+    }
+
     const blog = await Blog.findById(blogId);
 
     if (!blog) {
@@ -84,14 +144,21 @@ export const getBlogById = async (req, res) => {
     }
     res.json({ success: true, blog });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    res.json({ success: false, message: "Article non trouvé" });
   }
 };
 
 export const deleteBlogById = async (req, res) => {
   try {
-    // Sécurisation : on force l'ID en String pour éviter les objets malveillants
-    const id = String(req.body.id);
+    const id = req.body.id;
+
+    // Valider que l'ID est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.json({ 
+        success: false, 
+        message: "Article non trouvé" 
+      });
+    }
 
     await Blog.findByIdAndDelete(id);
     // C'est ici que SonarCloud bloquait !
@@ -105,9 +172,18 @@ export const deleteBlogById = async (req, res) => {
 
 export const togglePublish = async (req, res) => {
   try {
-    const id = String(req.body.id);
+    const id = req.body.id;
+
+    // Valider que l'ID est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.json({ 
+        success: false, 
+        message: "Article non trouvé" 
+      });
+    }
+
     const blog = await Blog.findById(id);
-    if (!blog) return res.json({ success: false, message: "Blog non trouvé" });
+    if (!blog) return res.json({ success: false, message: "Article non trouvé" });
 
     blog.isPublished = !blog.isPublished;
     await blog.save();
@@ -135,8 +211,16 @@ export const addComment = async (req, res) => {
 
 export const getBlogComments = async (req, res) => {
   try {
-    // Sécurisation ici aussi
-    const blogId = String(req.body.blogId);
+    const blogId = req.body.blogId;
+
+    // Valider que l'ID est un ObjectId valide
+    if (!mongoose.Types.ObjectId.isValid(blogId)) {
+      return res.json({ 
+        success: false, 
+        message: "Article non trouvé" 
+      });
+    }
+
     const comments = await Comment.find({
       blog: blogId,
       isApproved: true,

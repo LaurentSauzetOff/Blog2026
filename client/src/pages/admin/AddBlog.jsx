@@ -1,11 +1,13 @@
 import { assets, blogCategories } from "assets/assets";
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Quill from "quill";
 import { useAppContext } from "context/AppContext";
 import toast from "react-hot-toast";
 import { parse } from "marked";
 
 const AddBlog = () => {
+  const navigate = useNavigate();
   const { axios } = useAppContext();
   const [isAdding, setIsAdding] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,7 @@ const AddBlog = () => {
   const [subTitle, setSubTitle] = useState("");
   const [category, setCategory] = useState("Startup");
   const [isPublished, setIsPublished] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState("");
 
   const generateContent = async () => {
     if (!title) return toast.error("Vous devez entrer un titre");
@@ -49,6 +52,7 @@ const AddBlog = () => {
         description: quillRef.current.root.innerHTML,
         category,
         isPublished,
+        scheduledDate: isPublished ? null : scheduledDate,
       };
 
       const formData = new FormData();
@@ -64,6 +68,7 @@ const AddBlog = () => {
         setSubTitle("");
         quillRef.current.root.innerHTML = "";
         setCategory("Startup");
+        navigate("/admin");
       } else {
         toast.error(data.message);
       }
@@ -192,6 +197,26 @@ const AddBlog = () => {
             onChange={(e) => setIsPublished(e.target.checked)}
           />
         </div>
+
+        {!isPublished && (
+          <div className="mt-4">
+            <label htmlFor="scheduledDate" className="block font-medium">
+              Programmer la publication
+            </label>
+            <input
+              id="scheduledDate"
+              type="datetime-local"
+              value={scheduledDate}
+              onChange={(e) => setScheduledDate(e.target.value)}
+              className="mt-2 p-2 border border-gray-300 outline-none rounded text-foreground"
+              min={new Date().toISOString().slice(0, 16)}
+              required={!isPublished}
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              L'article sera automatiquement publié à la date et heure choisies
+            </p>
+          </div>
+        )}
 
         <button
           disabled={isAdding}

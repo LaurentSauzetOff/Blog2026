@@ -8,7 +8,7 @@ const BlogCard = ({ blog }) => {
   return (
     <Link
       to={`/blog/${_id}`} // 2. Plus besoin de onClick, on utilise 'to'
-      className="block w-full cursor-pointer rounded-lg overflow-hidden shadow hover:scale-102 hover:shadow-primary/25 duration-300 no-underline text-inherit"
+      className="blog-card-glow block w-full cursor-pointer rounded-lg overflow-hidden no-underline text-inherit"
     >
       {/* 3. Accessibilité : on donne un alt descriptif à l'image */}
       <img

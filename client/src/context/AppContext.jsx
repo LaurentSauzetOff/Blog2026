@@ -14,6 +14,7 @@ export const AppProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchBlogs = async () => {
     try {
@@ -35,6 +36,7 @@ export const AppProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `${storedToken}`;
     }
     fetchBlogs();
+    setIsLoading(false);
   }, []);
 
   // --- FIX SONARCLOUD : Mémorisation de l'objet value ---
@@ -48,8 +50,9 @@ export const AppProvider = ({ children }) => {
       setBlogs,
       input,
       setInput,
+      isLoading,
     }),
-    [token, blogs, input, navigate],
+    [token, blogs, input, navigate, isLoading],
   );
   // On liste les dépendances qui, si elles changent, doivent mettre à jour le contexte.
   // -----------------------------------------------------
