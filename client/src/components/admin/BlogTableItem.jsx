@@ -103,8 +103,13 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
               role="dialog"
               aria-modal="true"
               tabIndex={-1}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  event.preventDefault();
+                  setIsModalOpen(false);
+                }
+              }}
               className="relative z-[1000] bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full mx-4 border border-gray-200"
-              onClick={(e) => e.stopPropagation()}
             >
               <h2 className="text-xl font-bold text-gray-800">Attention !</h2>
               <p className="mt-2 text-gray-600 leading-relaxed">
