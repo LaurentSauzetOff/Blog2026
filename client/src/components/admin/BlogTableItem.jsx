@@ -102,7 +102,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
             <dialog
               ref={dialogRef}
               aria-modal="true"
-              tabIndex={-1}
+              tabIndex={0}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
                   event.preventDefault();
