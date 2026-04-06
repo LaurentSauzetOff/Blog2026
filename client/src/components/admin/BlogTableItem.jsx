@@ -83,7 +83,10 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
       {isModalOpen &&
         createPortal(
           // 1. On passe le z-index à 999 pour être au-dessus de TOUT (Sidebar, Navbar, etc.)
-          <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+          <div
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-[2px]"
+            onClick={() => setIsModalOpen(false)}
+          >
             {/* 2. On ajoute onClick={(e) => e.stopPropagation()} pour éviter que le clic 
            sur la boîte blanche ne soit confondu avec un clic sur le fond */}
             <div
