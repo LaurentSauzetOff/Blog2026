@@ -101,9 +101,8 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
            sur la boîte blanche ne soit confondu avec un clic sur le fond */}
             <dialog
               ref={dialogRef}
-              role="dialog"
               aria-modal="true"
-              tabIndex={0}
+              tabIndex={-1}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
                   event.preventDefault();
