@@ -11,25 +11,22 @@ app.disable("x-powered-by");
 
 await connectedDB();
 
-const allowedOrigins = [
+const allowedOrigins = new Set([
   "http://localhost:5173",
   "https://blog2026-omega.vercel.app",
-];
+]);
 
-// Middleware
 app.use(
   cors({
     origin: function (origin, callback) {
-      // On autorise les requêtes sans origine (comme Postman ou les outils serveurs)
-      // ou si l'origine est dans notre liste blanche
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.has(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Accès refusé par la politique CORS de Laurent"));
       }
     },
-    credentials: true, // Utile si tu gères des cookies ou des sessions plus tard
-    methods: ["GET", "POST", "PUT", "DELETE"], // On limite les verbes HTTP autorisés
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
   }),
 );
 app.use(express.json());
